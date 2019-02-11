@@ -1,8 +1,8 @@
 package org.openqa.selenium.pluma;
 
+import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriverException;
@@ -11,6 +11,7 @@ import org.openqa.selenium.remote.service.DriverService;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Driver;
 
 /**
  * Manages the life and death of a PlumaDriver server
@@ -37,7 +38,6 @@ public class PlumaDriverService extends DriverService{
     super(executable,port,args,environment);
   }
 
-
   /**
    * Configures and returns a new {@link PlumaDriverService} using the default configuration. In
    * this configuration, the service will use the plumadriver executable identified by the
@@ -49,6 +49,41 @@ public class PlumaDriverService extends DriverService{
   public static PlumaDriverService createDefaultService() {
     return new Builder().build();
   }
+
+  /**
+   * Builder used to configure new {@link PlumaDriverService} instances
+   */
+  public static class Builder extends DriverService.Builder<
+      PlumaDriverService, PlumaDriverService.Builder> {
+
+    @Override
+    public int score(Capabilities capabilities) {
+
+    }
+
+
+    @Override
+    protected File findDefaultExecutable() {
+
+    }
+
+    @Override
+    protected ImmutableList<String> createArgs() {
+
+    }
+
+    @Override
+    protected PlumaDriverService createDriverService(
+        File exe,
+        int port,
+        ImmutableList<String> args,
+        ImmutableMap<String, String> environment) {
+
+    }
+
+
+  }
+
 
 
 
