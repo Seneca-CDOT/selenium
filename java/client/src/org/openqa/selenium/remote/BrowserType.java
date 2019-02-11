@@ -26,6 +26,7 @@ public interface BrowserType {
   String FIREFOX_CHROME = "firefoxchrome";
   String GOOGLECHROME = "googlechrome";
   String SAFARI = "safari";
+  String PLUMA = "pluma";
   /**
    * @deprecated Use OPERA_BLINK
    */
