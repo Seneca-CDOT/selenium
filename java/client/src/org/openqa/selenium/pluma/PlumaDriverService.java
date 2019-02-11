@@ -24,6 +24,13 @@ public class PlumaDriverService extends DriverService{
   public static final String PLUMA_DRIVER_EXE_PROPERTY = "webdriver.pluma.driver";
 
   /**
+   * System property that defines the location of the log that will be written by
+   * the {@link #createDefaultService() default service}.
+   */
+  public static final String PLUMA_DRIVER_LOG_PROPERTY = "webdriver.pluma.driver";
+
+
+  /**
    * @param executable  The plumadriver executable.
    * @param port        Which port to start the PlumaDriver on.
    * @param args        The arguments to the launched server.
@@ -58,18 +65,37 @@ public class PlumaDriverService extends DriverService{
 
     @Override
     public int score(Capabilities capabilities) {
+      int score = 0;
 
+      if(BrowserType.PLUMA.equals(capabilities.getBrowserName())) {
+        score++;
+      }
+
+      if (capabilities.getCapability(PlumaOptions.CAPABILITY) != null) {
+        score++;
+      }
+      return score;
     }
 
 
     @Override
     protected File findDefaultExecutable() {
-
+      return findExecutable(
+          "plumadriver", PLUMA_DRIVER_EXE_PROPERTY,
+          "link to plumadriver selenium exe docs should be inserted here:",
+          "insert link to download executable file for pluma driver");
     }
 
     @Override
     protected ImmutableList<String> createArgs() {
+      if(getLogFile() == null) {
+        String logFilePath = System.getProperty(PLUMA_DRIVER_LOG_PROPERTY);
+        if(logFilePath != null) {
+          withLogFile(new File(logFilePath));
+        }
+      }
 
+      ImmutableList.Builder<String> argsBuilder = ImmutableList.builder();
     }
 
     @Override
