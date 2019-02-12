@@ -60,6 +60,7 @@ public class PlumaDriverService extends DriverService{
   /**
    * Builder used to configure new {@link PlumaDriverService} instances
    */
+  @AutoService(DriverService.Builder.class)
   public static class Builder extends DriverService.Builder<
       PlumaDriverService, PlumaDriverService.Builder> {
 
@@ -71,9 +72,9 @@ public class PlumaDriverService extends DriverService{
         score++;
       }
 
-      if (capabilities.getCapability(PlumaOptions.CAPABILITY) != null) {
-        score++;
-      }
+//      if (capabilities.getCapability(PlumaOptions.CAPABILITY) != null) {
+//        score++;
+//      }
       return score;
     }
 
@@ -96,6 +97,9 @@ public class PlumaDriverService extends DriverService{
       }
 
       ImmutableList.Builder<String> argsBuilder = ImmutableList.builder();
+      argsBuilder.add(String.format("--port=%d", getPort()));
+
+     return argsBuilder.build();
     }
 
     @Override
@@ -104,6 +108,12 @@ public class PlumaDriverService extends DriverService{
         int port,
         ImmutableList<String> args,
         ImmutableMap<String, String> environment) {
+      try {
+        return new PlumaDriverService(exe,port,args,environment);
+
+      } catch (IOException exception) {
+        throw new WebDriverException(exception);
+      }
 
     }
 
