@@ -11,14 +11,13 @@ import org.openqa.selenium.remote.service.DriverService;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Driver;
 
 /**
  * Manages the life and death of a PlumaDriver server
  */
 public class PlumaDriverService extends DriverService{
   /**
-   * System property that defines the location of the chromedriver executable that will be used by
+   * System property that defines the location of the plumadriver executable that will be used by
    * the {@link #createDefaultService() default service}.
    */
   public static final String PLUMA_DRIVER_EXE_PROPERTY = "webdriver.pluma.driver";
@@ -72,7 +71,7 @@ public class PlumaDriverService extends DriverService{
         score++;
       }
 
-//      if (capabilities.getCapability(PlumaOptions.CAPABILITY) != null) {
+//      if (capabilities.getCapability(PlumaOptions.CAPABILITY) != null) { // IS THIS NEEDED ??? ***INVESTIGATE***
 //        score++;
 //      }
       return score;
@@ -119,9 +118,4 @@ public class PlumaDriverService extends DriverService{
 
 
   }
-
-
-
-
-
 }
