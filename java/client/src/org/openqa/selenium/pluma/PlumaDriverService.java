@@ -70,10 +70,6 @@ public class PlumaDriverService extends DriverService{
       if(BrowserType.PLUMA.equals(capabilities.getBrowserName())) {
         score++;
       }
-
-//      if (capabilities.getCapability(PlumaOptions.CAPABILITY) != null) { // IS THIS NEEDED ??? ***INVESTIGATE***
-//        score++;
-//      }
       return score;
     }
 
@@ -115,7 +111,5 @@ public class PlumaDriverService extends DriverService{
       }
 
     }
-
-
   }
 }
