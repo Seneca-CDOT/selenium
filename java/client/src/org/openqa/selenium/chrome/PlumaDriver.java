@@ -1,4 +1,4 @@
-package org.openqa.selenium.pluma;
+package org.openqa.selenium.chrome;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;

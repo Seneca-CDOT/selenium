@@ -1,4 +1,4 @@
-package org.openqa.selenium.pluma;
+package org.openqa.selenium.chrome;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

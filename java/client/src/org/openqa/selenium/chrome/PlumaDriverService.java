@@ -1,4 +1,4 @@
-package org.openqa.selenium.pluma;
+package org.openqa.selenium.chrome;
 
 import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableList;
@@ -94,7 +94,7 @@ public class PlumaDriverService extends DriverService{
       ImmutableList.Builder<String> argsBuilder = ImmutableList.builder();
       argsBuilder.add(String.format("--port=%d", getPort()));
 
-     return argsBuilder.build();
+      return argsBuilder.build();
     }
 
     @Override
