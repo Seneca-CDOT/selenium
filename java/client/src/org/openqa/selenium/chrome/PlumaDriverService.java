@@ -26,7 +26,8 @@ public class PlumaDriverService extends DriverService{
    * System property that defines the location of the log that will be written by
    * the {@link #createDefaultService() default service}.
    */
-  public static final String PLUMA_DRIVER_LOG_PROPERTY = "webdriver.pluma.driver";
+  public static final String PLUMA_DRIVER_LOG_PROPERTY = "webdriver.pluma.logfile";
+
 
 
   /**
@@ -62,6 +63,11 @@ public class PlumaDriverService extends DriverService{
   @AutoService(DriverService.Builder.class)
   public static class Builder extends DriverService.Builder<
       PlumaDriverService, PlumaDriverService.Builder> {
+
+    // TODO: add verbose logging option for plumadriver
+    // TODO: add silent output property for plumadriver
+
+
 
     @Override
     public int score(Capabilities capabilities) {
