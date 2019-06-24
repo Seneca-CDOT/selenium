@@ -6,6 +6,9 @@ import static org.openqa.selenium.remote.CapabilityType.PAGE_LOAD_STRATEGY;
 import static org.openqa.selenium.remote.CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR;
 import static org.openqa.selenium.remote.CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR;
 
+import com.google.common.base.FinalizablePhantomReference;
+import com.google.common.collect.ImmutableSortedSet;
+
 import org .openqa.selenium.Capabilities;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.Proxy;
@@ -16,6 +19,9 @@ import org.openqa.selenium.remote.CapabilityType;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Class to manage options specific to {@link PlumaDriver}.
@@ -24,11 +30,29 @@ import java.io.IOException;
 
 public class PlumaOptions extends MutableCapabilities {
 
+  final static String PLUMA_OPTIONS = "plm:plumaOptions";
+
+  private final static String RUN_SCRIPTS = "runScripts";
+  private final static String LOAD_SUBRESOURCES = "resources";
+
+  private final static Set<String> CAPABILITY_NAMES = ImmutableSortedSet.<String>naturalOrder()
+      .add(RUN_SCRIPTS)
+      .add(LOAD_SUBRESOURCES)
+      .build();
+
+  private Map<String, Object> plumaOptions = new HashMap<>();
+
   private String binary;
 
 
   public PlumaOptions () {
     setCapability(CapabilityType.BROWSER_NAME, BrowserType.PLUMA);
+    setCapability(PLUMA_OPTIONS, plumaOptions);
+  }
+
+  public PlumaOptions(Capabilities source) {
+    this();
+    merge(source);
   }
 
   @Override
@@ -37,9 +61,34 @@ public class PlumaOptions extends MutableCapabilities {
     return this;
   }
 
-  // TODO: include method to allow script execution for browser
-  // TODO: include method to allow browser to intervene before parsing <-- WHAT???
-  // TODO: include method to load resources (iframes, stylesheets, scripts, images... need to integrate npm canvas in server source
+  @Override
+  public void setCapability(String key, Object value) {
+
+    super.setCapability(key,value);
+
+    if (CAPABILITY_NAMES.contains(key)) {
+      plumaOptions.put(key, value);
+    }
+
+    if(PLUMA_OPTIONS.equals(key)){
+      plumaOptions.clear();
+      Map<?,?> streamFrom;
+      if(value instanceof Map) {
+        streamFrom = (Map<?,?>) value;
+      } else if (value instanceof Capabilities) {
+        streamFrom = ((Capabilities) value).asMap();
+      } else {
+        throw new IllegalArgumentException("Value must not be null for " + key);
+      }
+
+      streamFrom.entrySet().stream()
+          .filter(e -> CAPABILITY_NAMES.contains(e.getKey()))
+          .filter(e -> e.getValue() != null)
+          .forEach( e -> {
+            setCapability((String) e.getKey(), value);
+          });
+    }
+  }
 
 
   /**
@@ -70,20 +119,35 @@ public class PlumaOptions extends MutableCapabilities {
   }
 
   public PlumaOptions setPageLoadStrategy(PageLoadStrategy strategy) {
-    setCapability(PAGE_LOAD_STRATEGY, strategy);
+    amend(PAGE_LOAD_STRATEGY, strategy);
     return this;
   }
 
+  // unhandled prompt behaviour should be set by default, therefore use amend instead of setCapability
   public PlumaOptions setUnhandledPromptBehaviour(UnexpectedAlertBehaviour behaviour) {
-    setCapability(UNHANDLED_PROMPT_BEHAVIOUR, behaviour);
-    setCapability(UNEXPECTED_ALERT_BEHAVIOUR, behaviour);
+    amend(UNHANDLED_PROMPT_BEHAVIOUR, behaviour);
     return this;
   }
+
 
   public PlumaOptions setAcceptInsecureCerts(boolean acceptInsecureCerts) {
-    setCapability(ACCEPT_INSECURE_CERTS, acceptInsecureCerts);
+    amend(ACCEPT_INSECURE_CERTS, acceptInsecureCerts);
     return this;
   }
 
 
+  /**
+   * sets capability for pluma remote endpoint to run scripts
+   * @param runScripts
+   * @return
+   */
+  public PlumaOptions setRunScripts(Boolean runScripts) {
+    amend(RUN_SCRIPTS, runScripts);
+    return this;
+  }
+
+  private PlumaOptions amend(String optionName, Object value) {
+    setCapability(optionName,value);
+    return this;
+  }
 }
