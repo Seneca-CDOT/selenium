@@ -33,11 +33,13 @@ public class PlumaOptions extends MutableCapabilities {
   final static String PLUMA_OPTIONS = "plm:plumaOptions";
 
   private final static String RUN_SCRIPTS = "runScripts";
+  private final static String REJECT_PUBLIC_SUFFIXES = "rejectPublicSuffixes";
   private final static String LOAD_SUBRESOURCES = "resources";
 
   private final static Set<String> CAPABILITY_NAMES = ImmutableSortedSet.<String>naturalOrder()
       .add(RUN_SCRIPTS)
       .add(LOAD_SUBRESOURCES)
+      .add(REJECT_PUBLIC_SUFFIXES)
       .build();
 
   private Map<String, Object> plumaOptions = new HashMap<>();
@@ -143,6 +145,11 @@ public class PlumaOptions extends MutableCapabilities {
    */
   public PlumaOptions setRunScripts(Boolean runScripts) {
     amend(RUN_SCRIPTS, runScripts);
+    return this;
+  }
+
+  public PlumaOptions rejectPublicSuffixes(Boolean rejectPublicSuffixes) {
+    amend(REJECT_PUBLIC_SUFFIXES, rejectPublicSuffixes);
     return this;
   }
 
